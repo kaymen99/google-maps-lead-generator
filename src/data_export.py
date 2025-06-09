@@ -50,6 +50,7 @@ def save_places_to_excel(places_data, filename):
     # Save to Excel
     df.to_excel(file_path, index=False)
     print(f"Data saved to {file_path}")
+    return file_path
 
 def update_business_data(df, index, info):
     """
@@ -90,9 +91,6 @@ def load_excel_data(filename: str) -> pd.DataFrame:
     
     # Load DataFrame from Excel
     df = pd.read_excel(file_path)
-    
-    # Filter out already searched data
-    df = df[~(df.get('searched') == 'YES')]
     
     # Replace Nan with ""
     df = df.fillna("")

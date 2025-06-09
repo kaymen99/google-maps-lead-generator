@@ -1,3 +1,4 @@
+import os
 from typing import List, Dict, TypedDict
 from tqdm.asyncio import tqdm
 from .data_export import update_business_data, load_excel_data
@@ -51,7 +52,7 @@ If no valid option exists for a category, return an empty string.
     
     # Invoke LLM to get structured response
     response = await ainvoke_llm(
-        model="openai/gpt-4.1-mini",
+        model=os.getenv("LLM_MODEL", "gpt-4.1-mini"),
         system_prompt=system_prompt,
         user_message=user_message,
         response_format=BusinessInfo,
@@ -67,12 +68,16 @@ async def analyze_business_emails(
     business_url: str
 ):
     system_prompt = f"""
-Identify all relevant business contact emails. Prioritize general contact addresses and emails of key personnel. Exclude department-specific ones (e.g., press, events) unless no main contact is available.
+Identify all relevant business contact emails. Prioritize general contact addresses (such as info@ or contact@) and emails of key personnel that use the business's domain. Exclude department-specific ones (e.g., press, events) unless no main contact is available.
+
+If no domain-based business emails are found, provide any available emails, including personal or free-domain addresses (e.g., Gmail, Yahoo) as fallback contacts.
 
 ## Business Information
 - Business Name: {business_name}
 - Business Location: {business_location}
 - Business Website URL: {business_url}
+
+**If only a single valid email is found, just return it.**
 """
 
     # Create user message with all the context
@@ -80,7 +85,7 @@ Identify all relevant business contact emails. Prioritize general contact addres
     
     # Invoke LLM to get structured response
     response = await ainvoke_llm(
-        model="openai/gpt-4o-mini",
+        model=os.getenv("LLM_MODEL", "gpt-4.1-mini"),
         system_prompt=system_prompt,
         user_message=user_message,
         response_format=EmailsResponse,
@@ -145,7 +150,7 @@ async def get_business_info(
         'email': " || ".join(emails_result.get('emails', '')),
     }
 
-async def process_businesses(excel_file) :
+async def process_businesses(excel_file, progress_callback=None) :
     """
     Process a list of businesses to extract detailed information and update the Excel file.
     
@@ -158,16 +163,21 @@ async def process_businesses(excel_file) :
     # Load the Excel file into a DataFrame
     df, file_path = load_excel_data(excel_file)
     
-    # Create progress bar for business processing
+    # Process each business with a progress bar
     for index, row in tqdm(df.iterrows(), desc="Processing businesses", unit="business"):
         name = row.get("name", "")
         url = row.get("website", "")
         location = row.get("address", "")
+        already_searched = row.get("searched", "")
         
-        if not url:
+        if not url or already_searched == "YES":
             continue
         
         try:
+            # Update UI progress via callback if provided
+            if progress_callback and callable(progress_callback):
+                await progress_callback(len(df), index, name)
+                
             # Get business info
             info = await get_business_info(url, name, location)
             

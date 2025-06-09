@@ -1,4 +1,5 @@
 import re
+import html2text
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from playwright.async_api import async_playwright
@@ -31,8 +32,16 @@ async def scrape_website(url: str, extract_links: bool = False):
             extracted_links = []
             if extract_links:
                 extracted_links = extract_links_from_html(html_content, page.url)  # make sure this is defined
+                
+            # Convert HTML to markdown
+            h = html2text.HTML2Text()
+            h.ignore_links = False
+            h.ignore_images = True
+            h.ignore_tables = True
+            markdown_content = h.handle(html_content)
+            markdown_content = re.sub(r"\n{3,}", "\n\n", markdown_content).strip()
 
-            return html_content, extracted_links
+            return markdown_content, extracted_links
     except Exception as e:
         print(f"Error scraping website: {e}")
         return None, []
@@ -47,12 +56,13 @@ def extract_links_from_html(html_content: str, main_url: str = ""):
     for tag in soup.find_all("a", href=True):
         href = tag["href"].strip()
         if href:
-            # Prepend main_url for relative links
-            if main_url and (href.startswith("./") or href.startswith("/") or href.startswith("#")):
+            # Accept only HTTP/HTTPS links as absolute
+            if href.lower().startswith('http://') or href.lower().startswith('https://'):
+                links.add(href)
+            else:
+                # Prepend main_url for all other relative links
                 full_url = urljoin(main_url, href)
                 links.add(full_url)
-            else:
-                links.add(href)
     return list(links)
 
 def find_relevant_links(urls: list[str]):
@@ -65,14 +75,18 @@ def find_relevant_links(urls: list[str]):
         "facebook": re.compile(r"^(https?:\/\/)?(www\.)?facebook\.com\/", re.I),
         "instagram": re.compile(r"^(https?:\/\/)?(www\.)?instagram\.com\/", re.I),
         "linkedin": re.compile(r"^(https?:\/\/)?([a-z]{2,3}\.)?linkedin\.com\/", re.I),
-        "contact": re.compile(r"^(https?:\/\/)?(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+\/(contact|contact-us)\/?$", re.I),
+        "contact": re.compile(r"contact", re.I)
     }
 
     result = {key: [] for key in patterns}
 
     for url in urls:
         for key, pattern in patterns.items():
-            if pattern.match(url):
+            # For social patterns, use match (they should start with the platform)
+            if key != "contact" and pattern.match(url):
+                result[key].append(url)
+            # For contact, use search (contact can appear anywhere in the URL)
+            elif key == "contact" and pattern.search(url):
                 result[key].append(url)
     return result
 
