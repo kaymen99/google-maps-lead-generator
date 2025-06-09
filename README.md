@@ -12,7 +12,7 @@ This **AI lead generation tool** helps you discover and enrich local businesses 
 
 ## **How It Works**
 
-The tool workflow is simple and powerful:
+The tool workflow is simple:
 
 ### 1. Data Collection
 - Takes a location and search query input (e.g., "Toronto", "Realtors")
@@ -24,13 +24,12 @@ The tool workflow is simple and powerful:
 - Uses an **AI agent (LLM)** to intelligently identify:
   - Email addresses
   - Detailed contact information
-  - Social media links (Facebook, Twitter, Instagram)
+  - Social media links (Facebook, Twitter, Instagram, etc)
   - Other relevant data points for outreach
 
 ### 3. Data Export
-- Saves all collected and enriched data to an Excel file
+- Saves all collected and enriched data to an Excel file, under the `data` directory
 - Organizes information in a clean, ready-to-use format for sales outreach
-- Stores files in the `/data` directory for easy access
 
 ## **Cost Implications**
 
@@ -68,8 +67,8 @@ Clone the repository and install dependencies:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/lead_generation.git
-cd lead_generation
+git clone https://github.com/kaymen99/google-maps-lead-generator
+cd google-maps-lead-generator
 
 # Install dependencies
 pip install -r requirements.txt
