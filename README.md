@@ -9,6 +9,7 @@ This **AI lead generation tool** helps you discover and enrich local businesses 
 - **Contact Detail Extraction** – Automatically finds emails, social media profiles, and more
 - **Smart Web Scraping** – Uses AI to navigate websites and extract relevant information
 - **Ready-to-Use Output** – Generates Excel files you can immediately use for outreach
+- **Multi-LLM Integration** – Choose any AI models like GPT-4.1, Claude or DeepSeek to run you search
 
 ## **How It Works**
 
@@ -59,7 +60,7 @@ Even better, Serper API offers **free credits** when you sign up, making your in
 
 - Python 3.8+ installed
 - Serper API key ([Get one here](https://serper.dev/))
-- OpenRouter API key (to use any LLM model) or you preferred LLM API key, like OpenAI or Claude
+- [OpenRouter API key](https://openrouter.ai/) (to use any LLM model) or you preferred LLM API key, like OpenAI or Claude
 
 ### Setup
 
