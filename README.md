@@ -2,6 +2,10 @@
 
 This **AI lead generation tool** helps you discover and enrich local businesses data from any location. It combines the power of **Serper Maps API** with intelligent **AI web scraping** to build comprehensive business prospect lists that are ready for your sales outreach campaigns!
 
+<div style="width: 100%; text-align: center;">
+  <img src="https://github.com/user-attachments/assets/a21d6cfc-4e64-4cfb-ab07-e33f0a596697" alt="Google Maps Lead Generation" style="max-width: 100%; border-radius: 8px;" />
+</div>
+
 ## **Why This Tool?**
 
 - **Cost-Efficient** – Generate lead lists at the fraction of the cost of other scrapers
@@ -9,7 +13,7 @@ This **AI lead generation tool** helps you discover and enrich local businesses 
 - **Contact Detail Extraction** – Automatically finds emails, social media profiles, and more
 - **Smart Web Scraping** – Uses AI to navigate websites and extract relevant information
 - **Ready-to-Use Output** – Generates Excel files you can immediately use for outreach
-- **Multi-LLM Integration** – Choose any AI models like GPT-4.1, Claude or DeepSeek to run you search
+- **Multi-LLM Integration** – Choose any AI models like GPT-4.1, Claude or DeepSeek to run your search
 
 ## **How It Works**
 
@@ -100,6 +104,14 @@ Then you can run the tool with:
 ```bash
 # Simply run the main.py file
 python main.py
+```
+
+### Running from Streamlit App
+
+You can also run the tool from a Streamlit app by running:
+
+```bash
+streamlit run app.py
 ```
 
 ### 📊 **Output Files**
