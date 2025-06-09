@@ -124,5 +124,3 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 ## **Contact**
 
 If you have any questions or suggestions, feel free to reach out!
-
-# google-maps-lead-generator

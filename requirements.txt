@@ -1,0 +1,9 @@
+requests
+pandas
+bs4
+playwright
+html2text
+python-dotenv
+openpyxl
+langchain_openai
+tqdm
