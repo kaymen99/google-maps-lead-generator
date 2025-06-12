@@ -9,9 +9,10 @@ from src.data_export import save_places_to_excel
 from src.utils import get_current_date
 from dotenv import load_dotenv
 
-load_dotenv()
+# Set debug mode (set to True for debugging, False for production)
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-# Set page config
+# Set page config FIRST
 st.set_page_config(
     page_title="Google Maps Lead Generator",
     page_icon="🔍",
@@ -29,33 +30,76 @@ st.markdown(
     """
 )
 
+# Load environment variables from .env file
+load_dotenv()
+
+# Debugging: Print environment variables to check if they are loaded correctly
+if DEBUG:
+    print("DEBUG SERPER_API_KEY:", os.getenv("SERPER_API_KEY"))
+    print("DEBUG OPENROUTER_API_KEY:", os.getenv("OPENROUTER_API_KEY"))
+    print("DEBUG LLM_MODEL:", os.getenv("LLM_MODEL"))
+
+# Fetch variables from .env
+env_serper_api_key = os.getenv("SERPER_API_KEY", "")
+env_openrouter_api_key = os.getenv("OPENROUTER_API_KEY", "")
+env_llm_model = os.getenv("LLM_MODEL", "")
+
+
+# Initialize session state with .env values if not already set
+if "SERPER_API_KEY" not in st.session_state:
+    st.session_state.SERPER_API_KEY = env_serper_api_key
+if "OPENROUTER_API_KEY" not in st.session_state:
+    st.session_state.OPENROUTER_API_KEY = env_openrouter_api_key
+if "LLM_MODEL" not in st.session_state:
+    st.session_state.LLM_MODEL = env_llm_model
+
 # Sidebar for settings
 with st.sidebar:
     st.header("Settings")
+
+# Show environment variables block only in debug mode
+    if DEBUG:
+        # Check if required environment variables are set
+        with st.expander("Show Environment Variables", expanded=False):
+            st.write("**SERPER_API_KEY:**", "✅ Set" if env_serper_api_key else "❌ Not Set")
+            st.write("**OPENROUTER_API_KEY:**", "✅ Set" if env_openrouter_api_key else "❌ Not Set")
+            st.write("**LLM_MODEL:**", env_llm_model if env_llm_model else "❌ Not Set")
+
     
     # API Keys
     st.subheader("API Keys")
-    serper_api_key = st.text_input("Serper API Key", type="password")
-    openrouter_api_key = st.text_input("OpenRouter API Key", type="password")
+    serper_api_key = st.text_input(
+        "Serper API Key",
+        value=st.session_state.SERPER_API_KEY,
+        type="password"
+    )
+    openrouter_api_key = st.text_input(
+        "OpenRouter API Key",
+        value=st.session_state.OPENROUTER_API_KEY,
+        type="password"
+    )
     
     # LLM Model Settings
     st.subheader("LLM Model")
+    llm_options = [
+        "openai/gpt-4.1-mini",
+        "openai/gpt-4o-mini",
+        "anthropic/claude-3-haiku",
+        "anthropic/claude-3.5-sonnet",
+        "deepseek/deepseek-chat",
+        "mistral/mistral-large-2"
+    ]
     llm_model = st.selectbox(
         "Select LLM Model",
-        options=[
-            "openai/gpt-4.1-mini",
-            "openai/gpt-4o-mini",
-            "anthropic/claude-3-haiku",
-            "anthropic/claude-3.5-sonnet",
-            "deepseek/deepseek-chat",
-            "mistral/mistral-large-2"
-        ],
-        index=0,
+        options=llm_options,
+        index=llm_options.index(st.session_state.LLM_MODEL) if st.session_state.LLM_MODEL in llm_options else 0,
     )
     
     # Save settings button
     if st.button("Save Settings"):
-        # Temporarily set environment variables for this session
+        st.session_state.SERPER_API_KEY = serper_api_key
+        st.session_state.OPENROUTER_API_KEY = openrouter_api_key
+        st.session_state.LLM_MODEL = llm_model
         os.environ["SERPER_API_KEY"] = serper_api_key
         os.environ["OPENROUTER_API_KEY"] = openrouter_api_key
         os.environ["LLM_MODEL"] = llm_model
