@@ -1,5 +1,7 @@
 # **Google Maps Lead Generation: Find Business data Using AI**
 
+## 👉 **[How to Scrape Unlimited Google Maps Leads Using AI!](https://dev.to/kaymen99/how-to-scrape-unlimited-google-maps-leads-using-ai-4kem)**  
+
 This **AI lead generation tool** helps you discover and enrich local businesses data from any location. It combines the power of **Serper Maps API** with intelligent **AI web scraping** to build comprehensive business prospect lists that are ready for your sales outreach campaigns!
 
 <div style="width: 100%; text-align: center;">
