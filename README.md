@@ -4,9 +4,7 @@
 
 This **AI lead generation tool** helps you discover and enrich local businesses data from any location. It combines the power of **Serper Maps API** with intelligent **AI web scraping** to build comprehensive business prospect lists that are ready for your sales outreach campaigns!
 
-<div style="width: 100%; text-align: center;">
-  <img src="https://github.com/user-attachments/assets/a21d6cfc-4e64-4cfb-ab07-e33f0a596697" alt="Google Maps Lead Generation" style="max-width: 100%; border-radius: 8px;" />
-</div>
+https://github.com/user-attachments/assets/e65275a6-0369-4f37-bb5d-f81f41f97409
 
 ## **Why This Tool?**
 
